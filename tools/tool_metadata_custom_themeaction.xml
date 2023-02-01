@@ -96,6 +96,18 @@
 
                     document.getElementById('gemBtn').addEventListener('click', () => {
                         console.log('Du har gemt metadata')
+                        ds.execute({
+                            command: 'update-theme-metadata',
+                            beskrivelse: document.getElementById('beskrivelse').value,
+                            kontakt_person: document.getElementById('ansvarlig').value,
+                            kontakt_email: document.getElementById('email').value,
+                            status: document.getElementById('status').value,
+                            afdeling: document.getElementById('afdeling').value,
+                            center: document.getElementById('center').value,
+                            frekvens: document.getElementById('frekvens').value,
+                            id: metadata.id
+                        }, () => {
+                        })
                     })
 
                 })

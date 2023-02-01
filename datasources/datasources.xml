@@ -4,6 +4,7 @@
 	<datasource name="ds_metadata" endpoint="ep_k330">
         <table name="metadata" schema="proj_metadata" pkcolumn="id" />
         <sql command="read-metadata-for-theme">select * from proj_metadata.metadata where tema = [string: tema];</sql>
+        <sql command="update-theme-metadata">update proj_metadata.metadata set beskrivelse=[string:beskrivelse], opret_dato=[string: if IsDefined(opret_dato) then opret_dato else null endif]::date, kontakt_person=[string:kontakt_person], kontakt_email=[string:kontakt_email], revision_dato=now(), gyldigheds_dato=[string: if IsDefined(gyldigheds_dato) then gyldigheds_dato else null endif]::date, status=[string:status], frekvens=[string:frekvens], afdeling=[string:afdeling],  center=[string:center] where id=[number:id];</sql>
     </datasource>
 
 </datasources>
