@@ -30,7 +30,7 @@
                     console.log(metadata)
                     var html = `
                         <h2>${theme._displayname}</h2><br>
-                        <div style="display: grid;">
+                        <div id="metadata" style="display: grid;">
                             <label for="ansvarlig">Ansvarlig</label>
                             <input style="cursor: not-allowed;" type="text" id="ansvarlig" readonly>
 
@@ -64,12 +64,35 @@
                     document.getElementById('status').value = metadata.status;
                     document.getElementById('frekvens').value = metadata.frekvens;
                     document.getElementById('metadata_dato').value = metadata.opret_dato;
+
+                    dialog.addButtonsHTML(`
+                                        <div style='text-align: right;'>
+                                            <button>Gem metadata</button>
+                                        </div>
+                                        <label for="rediger">Rediger metadata</label>
+                                        <input type="checkbox" id="redigerCheckbox">`)
+                    
+                    dialog.showDialog()
+
+                    var redigerCheckboxEl = document.getElementById('redigerCheckbox')
+
+                    redigerCheckboxEl.addEventListener('change', () => {
+                        var inputEls = document.querySelectorAll('#metadata input, #metadata textarea')
+                        if (redigerCheckboxEl.checked) {
+                            inputEls.forEach(el => {
+                                el.removeAttribute('readonly')
+                                el.style.cursor = 'auto'
+                            })
+                        } else if (!redigerCheckboxEl.checked) {
+                            inputEls.forEach(el => {
+                                el.setAttribute('readonly', '')
+                                el.style.cursor = 'not-allowed'
+                            })
+                        }
+                    })
                 })
 
 
-                dialog.addButtonsHTML("<div style='text-align: right;'><button>Do it</button></div>")
-                
-                dialog.showDialog()
 
             },
 
