@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool type="themeaction">
+    <cbinfo-metadata>
+        <param name="tool.help.text">Hjælpetext til custom metadatamodul</param>
+    </cbinfo-metadata>
+
+    <displayname><![CDATA[[Se temaets metadata]]]></displayname>
+    <description><![CDATA[[Et værktøj til at kigge på eller editere i metadata på temaet.]]]></description>
+
+    <src><![CDATA[[
+        themeActions.registerAction(new ThemeAction({
+            name: 'metadata_custom',
+
+            actionfunction: theme => {
+                theme.show()
+                var dialog = new Dialog({
+                    id: 'metadata_dialog',
+                    title: 'Metadata'
+                })
+
+                var ds = spm.getSession().getDatasource('ds_metadata')
+
+                ds.execute({command: 'read-metadata-for-theme', tema: theme.name}, resp => {
+                    var metadata = resp[0]
+                    console.log(metadata)
+                    var html = `
+                        <h2>${theme._displayname}</h2><br>
+                        <table>
+                            <tr>
+                                <td>Ansvarlig </td>
+                                <td>${metadata.kontakt_person}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>${metadata.kontakt_email}</td>
+                            </tr>
+                            <tr>
+                                <td>Afdeling</td>
+                                <td>${metadata.afdeling}</td>
+                            </tr>
+                            <tr>
+                                <td>Center</td>
+                                <td>${metadata.center}</td>
+                            </tr>
+                            <tr>
+                                <td>Beskrivelse</td>
+                                <td>${metadata.beskrivelse}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>${metadata.status}</td>
+                            </tr>
+                            <tr>
+                                <td>Ajourføringsfrekvens</td>
+                                <td>${metadata.frekvens}</td>
+                            </tr>
+                            <tr>
+                                <td>Metadata dato</td>
+                                <td>${metadata.opret_dato}</td>
+                            </tr>
+                        </table>`
+                    dialog.addContentHTML(html)
+                })
+
+
+                dialog.showDialog()
+            },
+
+            conditionfunction: theme => {
+                if (typeof(theme.getMetadata('metadata.url')) == 'undefined') {
+                    return true
+                }
+            },
+
+            buttonoptions: {
+                tooltip: 'Se metadata for tema'
+            }
+        }))
+    ]]]></src>
+    
+
+</tool>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy>
+	<version>0.1</version>
+    <lastupdated>4.4</lastupdated>
+    <since>4.4</since>
+    <description>Metadatamodul for Spatial Suite</description>
+	
+</deploy>

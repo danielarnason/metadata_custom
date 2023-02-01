@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<datasources>
+
+	<datasource name="ds_metadata" endpoint="ep_k330">
+        <table name="metadata" schema="proj_metadata" pkcolumn="id" />
+        <sql command="read-metadata-for-theme">select * from proj_metadata.metadata where tema = [string: tema];</sql>
+    </datasource>
+
+</datasources>
