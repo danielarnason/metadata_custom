@@ -15,7 +15,12 @@
                 theme.show()
                 var dialog = new Dialog({
                     id: 'metadata_dialog',
-                    title: 'Metadata'
+                    title: 'Metadata',
+                    resizable: {
+                        x: true,
+                        y: false
+                    },
+                    minwidth: 300
                 })
 
                 var ds = spm.getSession().getDatasource('ds_metadata')
@@ -25,45 +30,47 @@
                     console.log(metadata)
                     var html = `
                         <h2>${theme._displayname}</h2><br>
-                        <table>
-                            <tr>
-                                <td>Ansvarlig </td>
-                                <td>${metadata.kontakt_person}</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>${metadata.kontakt_email}</td>
-                            </tr>
-                            <tr>
-                                <td>Afdeling</td>
-                                <td>${metadata.afdeling}</td>
-                            </tr>
-                            <tr>
-                                <td>Center</td>
-                                <td>${metadata.center}</td>
-                            </tr>
-                            <tr>
-                                <td>Beskrivelse</td>
-                                <td>${metadata.beskrivelse}</td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
-                                <td>${metadata.status}</td>
-                            </tr>
-                            <tr>
-                                <td>Ajourføringsfrekvens</td>
-                                <td>${metadata.frekvens}</td>
-                            </tr>
-                            <tr>
-                                <td>Metadata dato</td>
-                                <td>${metadata.opret_dato}</td>
-                            </tr>
-                        </table>`
+                        <div style="display: grid;">
+                            <label for="ansvarlig">Ansvarlig</label>
+                            <input style="cursor: not-allowed;" type="text" id="ansvarlig" readonly>
+
+                            <label for="email">Email</label>
+                            <input style="cursor: not-allowed;" type="text" id="email" readonly>
+
+                            <label for="afdeling">Afdeling</label>
+                            <input style="cursor: not-allowed;" type="text" id="afdeling" readonly>
+
+                            <label for="center">Center</label>
+                            <input style="cursor: not-allowed;" type="text" id="center" readonly>
+
+                            <label for="beskrivelse">Beskrivelse</label>
+                            <textarea id="beskrivelse" name="beskrivelse" readonly style="width: 100%; resize: none; cursor: not-allowed" rows="5">${metadata.beskrivelse}</textarea>
+
+                            <label for="status">Status</label>
+                            <input style="cursor: not-allowed;" type="text" id="status" readonly>
+
+                            <label for="frekvens">Ajourføringsfrekvens</label>
+                            <input style="cursor: not-allowed;" type="text" id="frekvens" readonly>
+
+                            <label for="metadata_dato">Metadata dato</label>
+                            <input style="cursor: not-allowed;" type="text" id="metadata_dato" readonly>
+                        </div>`
                     dialog.addContentHTML(html)
+                    
+                    document.getElementById('ansvarlig').value = metadata.kontakt_person;
+                    document.getElementById('email').value = metadata.kontakt_email;
+                    document.getElementById('afdeling').value = metadata.afdeling;
+                    document.getElementById('center').value = metadata.center;
+                    document.getElementById('status').value = metadata.status;
+                    document.getElementById('frekvens').value = metadata.frekvens;
+                    document.getElementById('metadata_dato').value = metadata.opret_dato;
                 })
 
 
+                dialog.addButtonsHTML("<div style='text-align: right;'><button>Do it</button></div>")
+                
                 dialog.showDialog()
+
             },
 
             conditionfunction: theme => {
