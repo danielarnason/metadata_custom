@@ -31,7 +31,6 @@
                     if (resp.length > 0) {
 
                         var metadata = resp[0]
-                        console.log(metadata)
                         var html = `
                             <h2>${theme._displayname}</h2><br>
                             <div id="metadata" style="display: grid;">
@@ -60,7 +59,7 @@
                                 <input style="cursor: not-allowed;" type="text" id="frekvens" readonly>
 
                                 <label for="revision_dato">Metadata sidst opdateret</label>
-                                <input style="cursor: not-allowed;" type="text" id="revision_dato" readonly>
+                                <input type="date" id="revision_dato" disabled>
                             </div>`
                         dialog.addContentHTML(html)
                         
@@ -71,7 +70,7 @@
                         document.getElementById('center').value = metadata.center;
                         document.getElementById('status').value = metadata.status;
                         document.getElementById('frekvens').value = metadata.opdaterings_frekvens;
-                        document.getElementById('revision_dato').value = metadata.revision_dato;
+                        document.getElementById('revision_dato').value = metadata.revision_dato.split(' ')[0];
 
                         dialog.addButtonsHTML(`
                                             <div style='text-align: right;'>
@@ -96,8 +95,10 @@
                             } else if (!redigerCheckboxEl.checked) {
                                 gemBtnEl.setAttribute('disabled', '')
                                 inputEls.forEach(el => {
-                                    el.setAttribute('readonly', '')
-                                    el.style.cursor = 'not-allowed'
+                                    if (el.type != 'date') {
+                                        el.setAttribute('readonly', '')
+                                        el.style.cursor = 'not-allowed'
+                                    }
                                 })
                             }
                         })
@@ -147,39 +148,17 @@
 
                                 <label for="frekvens">Ajourføringsfrekvens</label>
                                 <input type="text" id="frekvens">
-
-                                <label for="revision_dato">Metadata sidst opdateret</label>
-                                <input type="text" id="revision_dato">
                             </div>`
                         dialog.addContentHTML(html)
                         dialog.addButtonsHTML(`
                                             <div style='text-align: right;'>
                                                 <button id="gemBtn">Gem metadata</button>
-                                            </div>
-                                            <label for="rediger">Rediger metadata</label>
-                                            <input type="checkbox" id="redigerCheckbox" checked>`)
+                                            </div>`)
                         
                         dialog.showDialog()
 
                         var redigerCheckboxEl = document.getElementById('redigerCheckbox')
                         var gemBtnEl = document.getElementById('gemBtn')
-
-                        redigerCheckboxEl.addEventListener('change', () => {
-                            var inputEls = document.querySelectorAll('#metadata input, #metadata textarea')
-                            gemBtnEl.removeAttribute('disabled')
-                            if (redigerCheckboxEl.checked) {
-                                inputEls.forEach(el => {
-                                    el.removeAttribute('readonly')
-                                    el.style.cursor = 'auto'
-                                })
-                            } else if (!redigerCheckboxEl.checked) {
-                                gemBtnEl.setAttribute('disabled', '')
-                                inputEls.forEach(el => {
-                                    el.setAttribute('readonly', '')
-                                    el.style.cursor = 'not-allowed'
-                                })
-                            }
-                        })
 
                         document.getElementById('gemBtn').addEventListener('click', () => {
                             ds.execute({
@@ -215,7 +194,8 @@
             },
 
             buttonoptions: {
-                tooltip: 'Se metadata for tema'
+                tooltip: 'Se metadata for tema',
+				icon: spatialmap.gui.SKIN_PATH_AND_NAME + "/images/buttons/meta.png"
             }
         }))
     ]]]></src>
