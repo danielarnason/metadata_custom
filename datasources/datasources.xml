@@ -3,8 +3,26 @@
 
 	<datasource name="ds_metadata" endpoint="ep_k330">
         <table name="metadata" schema="proj_metadata" pkcolumn="id" />
-        <sql command="read-metadata-for-theme">select * from proj_metadata.metadata where tema = [string: tema];</sql>
-        <sql command="update-theme-metadata">update proj_metadata.metadata set beskrivelse=[string:beskrivelse], opret_dato=[string: if IsDefined(opret_dato) then opret_dato else null endif]::date, kontakt_person=[string:kontakt_person], kontakt_email=[string:kontakt_email], revision_dato=now(), gyldigheds_dato=[string: if IsDefined(gyldigheds_dato) then gyldigheds_dato else null endif]::date, status=[string:status], frekvens=[string:frekvens], afdeling=[string:afdeling],  center=[string:center] where id=[number:id];</sql>
+        <sql command="read-metadata-for-theme">select * from proj_metadata.metadata where theme = [string: theme];</sql>
+        <sql command="update-theme-metadata">
+            update proj_metadata.metadata 
+            set beskrivelse=[string:beskrivelse],
+                dataejer=[string:dataejer],
+                dataejer_short=[string:dataejer_short],
+                dataejer_email=[string:dataejer_email],
+                revision_dato=now(),
+                status=[string:status],
+                opdaterings_frekvens=[string:opdaterings_frekvens],
+                afdeling=[string:afdeling],
+                center=[string:center],
+                revision_user_short=[string:user_short], 
+                revision_user_long=[string:user_long] 
+            where id=[number:id];
+        </sql>
+        <sql command="create-theme-metadata">
+            insert into proj_metadata.metadata (beskrivelse, metadata_opret_dato, dataejer, dataejer_short, dataejer_email, revision_dato, theme, status, opdaterings_frekvens, afdeling, center, revision_user_short, revision_user_long)
+            values ([string:beskrivelse], now(), [string:dataejer], [string:dataejer_short], [string:dataejer_email], now(), [string:theme], [string:status], [string:opdaterings_frekvens], [string:afdeling], [string:center], [string:revision_user_short], [string:revision_user_long])
+        </sql>
     </datasource>
 
 </datasources>
