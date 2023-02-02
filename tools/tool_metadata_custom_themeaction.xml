@@ -126,28 +126,28 @@
                             <h2>${theme._displayname}</h2><br>
                             <div id="metadata" style="display: grid;">
                                 <label for="ansvarlig">Ansvarlig</label>
-                                <input type="text" id="ansvarlig">
+                                <input placeholder="Indtast dataejers navn" type="text" id="ansvarlig">
 
-                                <label for="ansvarlig_short">Ansvarlig (windows brugernavn)</label>
-                                <input type="text" id="ansvarlig_short">
+                                <label for="ansvarlig_short">Ansvarlig brugernavn</label>
+                                <input placeholder="Indtast windows brugernavn" type="text" id="ansvarlig_short">
 
                                 <label for="email">Email</label>
-                                <input type="text" id="email">
+                                <input placeholder="Indtast dataejers email" type="text" id="email">
 
                                 <label for="afdeling">Afdeling</label>
-                                <input type="text" id="afdeling">
+                                <input placeholder="Indtast dataejers afdeling" type="text" id="afdeling">
 
                                 <label for="center">Center</label>
-                                <input type="text" id="center">
+                                <input placeholder="Indtast dataejers center" type="text" id="center">
 
                                 <label for="beskrivelse">Beskrivelse</label>
-                                <textarea id="beskrivelse" name="beskrivelse" style="width: 100%; resize: none;" rows="5"></textarea>
+                                <textarea placeholder="Beskriv datasættet og hvad det f.eks. bliver brugt til" id="beskrivelse" name="beskrivelse" style="width: 100%; resize: none;" rows="5"></textarea>
 
                                 <label for="status">Status</label>
-                                <input type="text" id="status">
+                                <input placeholder="Angiv datasættets status" type="text" id="status">
 
                                 <label for="frekvens">Ajourføringsfrekvens</label>
-                                <input type="text" id="frekvens">
+                                <input placeholder="Hvor ofte bliver data opdateret?" type="text" id="frekvens">
                             </div>`
                         dialog.addContentHTML(html)
                         dialog.addButtonsHTML(`
