@@ -23,6 +23,12 @@
             insert into proj_metadata.metadata (beskrivelse, metadata_opret_dato, dataejer, dataejer_short, dataejer_email, revision_dato, theme, status, opdaterings_frekvens, afdeling, center, revision_user_short, revision_user_long)
             values ([string:beskrivelse], now(), [string:dataejer], [string:dataejer_short], [string:dataejer_email], now(), [string:theme], [string:status], [string:opdaterings_frekvens], [string:afdeling], [string:center], [string:revision_user_short], [string:revision_user_long])
         </sql>
+        <sql command="read-user-metadata">
+            select 
+                *
+            from proj_metadata.metadata
+            where dataejer_short = [string:username];
+        </sql>
     </datasource>
 
 </datasources>
