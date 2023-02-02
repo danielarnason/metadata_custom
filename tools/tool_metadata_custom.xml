@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool>
+    <displayname>Mine temaer</displayname>
+    <tooltip>Vis de temaer som jeg er ansvarlig for</tooltip>
+    <description>Værktøj til at vise alle de temaer, som brugeren er markeret som dataejer for i metadatamodulet.</description>
+
+    <onclick>myMetadata()</onclick>
+
+    <jssrc><![CDATA[
+        var myMetadata = () => {
+            var dialog = new Dialog({
+                title: 'Mine temaer',
+                id: 'myMetadata',
+                resizable: {
+                    x: true,
+                    y: true
+                },
+                minwidth: 300
+            })
+
+            var metadataDs = spm.getSession().getDatasource('ds_metadata')
+            var username = spm.getSession().getPrincipal().shortid
+
+            metadataDs.execute({
+                command: 'read-user-metadata',
+                username: username
+            }, resp => {
+                var html = '<div id="myMetadataThemes" style="height: 100%; display: flex; flex-direction: column;"></div>'
+                dialog.addContentHTML(html)
+                if (resp.length > 0) {
+                    resp.forEach(theme => {
+                        var themeDisplayName = spm.getTheme(theme.theme)._displayname
+                        let html = `
+                            <div id="metadataResult" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <p>${themeDisplayName} (${theme.theme})</p><button id="showTheme-${theme.id}">Tænd tema</button>
+                            </div>
+                        `
+                        spsjq('#myMetadataThemes').append(html)
+                        document.getElementById(`showTheme-${theme.id}`).addEventListener('click', () => {
+                            spm.getTheme(theme.theme).show();
+                        })
+                    })
+                } else {
+                    let html = `
+                        <h3 style="margin: 5px;">Du er ikke dataejer for nogen temaer</h3>
+                    `
+                    spsjq('#myMetadataThemes').append(html)
+                }
+
+                dialog.show()
+            })
+
+        }
+    ]]></jssrc>
+    
+</tool>
