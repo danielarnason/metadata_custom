@@ -26,89 +26,94 @@
                 var ds = spm.getSession().getDatasource('ds_metadata')
 
                 ds.execute({command: 'read-metadata-for-theme', tema: theme.name}, resp => {
-                    var metadata = resp[0]
-                    console.log(metadata)
-                    var html = `
-                        <h2>${theme._displayname}</h2><br>
-                        <div id="metadata" style="display: grid;">
-                            <label for="ansvarlig">Ansvarlig</label>
-                            <input style="cursor: not-allowed;" type="text" id="ansvarlig" readonly>
+                    if (resp.length > 0) {
 
-                            <label for="email">Email</label>
-                            <input style="cursor: not-allowed;" type="text" id="email" readonly>
+                        var metadata = resp[0]
+                        console.log(metadata)
+                        var html = `
+                            <h2>${theme._displayname}</h2><br>
+                            <div id="metadata" style="display: grid;">
+                                <label for="ansvarlig">Ansvarlig</label>
+                                <input style="cursor: not-allowed;" type="text" id="ansvarlig" readonly>
 
-                            <label for="afdeling">Afdeling</label>
-                            <input style="cursor: not-allowed;" type="text" id="afdeling" readonly>
+                                <label for="email">Email</label>
+                                <input style="cursor: not-allowed;" type="text" id="email" readonly>
 
-                            <label for="center">Center</label>
-                            <input style="cursor: not-allowed;" type="text" id="center" readonly>
+                                <label for="afdeling">Afdeling</label>
+                                <input style="cursor: not-allowed;" type="text" id="afdeling" readonly>
 
-                            <label for="beskrivelse">Beskrivelse</label>
-                            <textarea id="beskrivelse" name="beskrivelse" readonly style="width: 100%; resize: none; cursor: not-allowed" rows="5">${metadata.beskrivelse}</textarea>
+                                <label for="center">Center</label>
+                                <input style="cursor: not-allowed;" type="text" id="center" readonly>
 
-                            <label for="status">Status</label>
-                            <input style="cursor: not-allowed;" type="text" id="status" readonly>
+                                <label for="beskrivelse">Beskrivelse</label>
+                                <textarea id="beskrivelse" name="beskrivelse" readonly style="width: 100%; resize: none; cursor: not-allowed" rows="5">${metadata.beskrivelse}</textarea>
 
-                            <label for="frekvens">Ajourføringsfrekvens</label>
-                            <input style="cursor: not-allowed;" type="text" id="frekvens" readonly>
+                                <label for="status">Status</label>
+                                <input style="cursor: not-allowed;" type="text" id="status" readonly>
 
-                            <label for="metadata_dato">Metadata dato</label>
-                            <input style="cursor: not-allowed;" type="text" id="metadata_dato" readonly>
-                        </div>`
-                    dialog.addContentHTML(html)
-                    
-                    document.getElementById('ansvarlig').value = metadata.kontakt_person;
-                    document.getElementById('email').value = metadata.kontakt_email;
-                    document.getElementById('afdeling').value = metadata.afdeling;
-                    document.getElementById('center').value = metadata.center;
-                    document.getElementById('status').value = metadata.status;
-                    document.getElementById('frekvens').value = metadata.frekvens;
-                    document.getElementById('metadata_dato').value = metadata.opret_dato;
+                                <label for="frekvens">Ajourføringsfrekvens</label>
+                                <input style="cursor: not-allowed;" type="text" id="frekvens" readonly>
 
-                    dialog.addButtonsHTML(`
-                                        <div style='text-align: right;'>
-                                            <button id="gemBtn" disabled>Gem metadata</button>
-                                        </div>
-                                        <label for="rediger">Rediger metadata</label>
-                                        <input type="checkbox" id="redigerCheckbox">`)
-                    
-                    dialog.showDialog()
+                                <label for="metadata_dato">Metadata dato</label>
+                                <input style="cursor: not-allowed;" type="text" id="metadata_dato" readonly>
+                            </div>`
+                        dialog.addContentHTML(html)
+                        
+                        document.getElementById('ansvarlig').value = metadata.kontakt_person;
+                        document.getElementById('email').value = metadata.kontakt_email;
+                        document.getElementById('afdeling').value = metadata.afdeling;
+                        document.getElementById('center').value = metadata.center;
+                        document.getElementById('status').value = metadata.status;
+                        document.getElementById('frekvens').value = metadata.frekvens;
+                        document.getElementById('metadata_dato').value = metadata.opret_dato;
 
-                    var redigerCheckboxEl = document.getElementById('redigerCheckbox')
-                    var gemBtnEl = document.getElementById('gemBtn')
+                        dialog.addButtonsHTML(`
+                                            <div style='text-align: right;'>
+                                                <button id="gemBtn" disabled>Gem metadata</button>
+                                            </div>
+                                            <label for="rediger">Rediger metadata</label>
+                                            <input type="checkbox" id="redigerCheckbox">`)
+                        
+                        dialog.showDialog()
 
-                    redigerCheckboxEl.addEventListener('change', () => {
-                        var inputEls = document.querySelectorAll('#metadata input, #metadata textarea')
-                        gemBtnEl.removeAttribute('disabled')
-                        if (redigerCheckboxEl.checked) {
-                            inputEls.forEach(el => {
-                                el.removeAttribute('readonly')
-                                el.style.cursor = 'auto'
-                            })
-                        } else if (!redigerCheckboxEl.checked) {
-                            gemBtnEl.setAttribute('disabled', '')
-                            inputEls.forEach(el => {
-                                el.setAttribute('readonly', '')
-                                el.style.cursor = 'not-allowed'
-                            })
-                        }
-                    })
+                        var redigerCheckboxEl = document.getElementById('redigerCheckbox')
+                        var gemBtnEl = document.getElementById('gemBtn')
 
-                    document.getElementById('gemBtn').addEventListener('click', () => {
-                        console.log('Du har gemt metadata')
-                        ds.execute({
-                            command: 'update-theme-metadata',
-                            beskrivelse: document.getElementById('beskrivelse').value,
-                            kontakt_person: document.getElementById('ansvarlig').value,
-                            kontakt_email: document.getElementById('email').value,
-                            status: document.getElementById('status').value,
-                            afdeling: document.getElementById('afdeling').value,
-                            center: document.getElementById('center').value,
-                            frekvens: document.getElementById('frekvens').value,
-                            id: metadata.id
-                        }, () => {
+                        redigerCheckboxEl.addEventListener('change', () => {
+                            var inputEls = document.querySelectorAll('#metadata input, #metadata textarea')
+                            gemBtnEl.removeAttribute('disabled')
+                            if (redigerCheckboxEl.checked) {
+                                inputEls.forEach(el => {
+                                    el.removeAttribute('readonly')
+                                    el.style.cursor = 'auto'
+                                })
+                            } else if (!redigerCheckboxEl.checked) {
+                                gemBtnEl.setAttribute('disabled', '')
+                                inputEls.forEach(el => {
+                                    el.setAttribute('readonly', '')
+                                    el.style.cursor = 'not-allowed'
+                                })
+                            }
                         })
-                    })
+
+                        document.getElementById('gemBtn').addEventListener('click', () => {
+                            ds.execute({
+                                command: 'update-theme-metadata',
+                                beskrivelse: document.getElementById('beskrivelse').value,
+                                kontakt_person: document.getElementById('ansvarlig').value,
+                                kontakt_email: document.getElementById('email').value,
+                                status: document.getElementById('status').value,
+                                afdeling: document.getElementById('afdeling').value,
+                                center: document.getElementById('center').value,
+                                frekvens: document.getElementById('frekvens').value,
+                                id: metadata.id
+                            }, () => {
+                                toastr.success('Metadata gemt', 'Success')
+                            })
+                        })
+                    } else {
+                        toastr.warning('mangler metadata', 'Fejl')
+                    }
 
                 })
 
