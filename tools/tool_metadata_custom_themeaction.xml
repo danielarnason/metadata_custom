@@ -188,7 +188,7 @@
             },
 
             conditionfunction: theme => {
-                if (typeof(theme.getMetadata('metadata.url')) == 'undefined') {
+                if (theme.initialConfig.primaryendpointtype == 'postgis') {
                     return true
                 }
             },
