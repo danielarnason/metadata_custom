@@ -161,23 +161,47 @@
                         var gemBtnEl = document.getElementById('gemBtn')
 
                         document.getElementById('gemBtn').addEventListener('click', () => {
-                            ds.execute({
-                                command: 'create-theme-metadata',
-                                beskrivelse: document.getElementById('beskrivelse').value,
+                            var validate = {
                                 dataejer: document.getElementById('ansvarlig').value,
-                                dataejer_short: document.getElementById('ansvarlig_short').value,
+                                dataejer_short:  document.getElementById('ansvarlig_short').value,
                                 dataejer_email: document.getElementById('email').value,
-                                theme: theme.name,
                                 status: document.getElementById('status').value,
-                                afdeling: document.getElementById('afdeling').value,
-                                center: document.getElementById('center').value,
-                                opdaterings_frekvens: document.getElementById('frekvens').value,
-                                revision_user_short: user_short,
-                                revision_user_long: user_long
-                            }, () => {
-                                toastr.success('Metadata gemt', 'Success')
-                                dialog.close()
-                            })
+                                opdaterings_frekvens: document.getElementById('frekvens').value
+                            }
+
+                            if (Object.values(validate).includes('')) {
+                                let dataejer = document.getElementById('ansvarlig')
+                                let dataejer_short = document.getElementById('ansvarlig_short')
+                                let dataejer_email = document.getElementById('email')
+                                let status = document.getElementById('status')
+                                let opdaterings_frekvens = document.getElementById('frekvens')
+
+                                dataejer.style.borderColor = '#ff000030'
+                                dataejer_short.style.borderColor = '#ff000030'
+                                dataejer_email.style.borderColor = '#ff000030'
+                                status.style.borderColor = '#ff000030'
+                                opdaterings_frekvens.style.borderColor = '#ff000030'
+
+                                toastr.error('Mangler værdier. Kan ikke gemme!', 'Fejl')
+                            } else {
+                                ds.execute({
+                                    command: 'create-theme-metadata',
+                                    beskrivelse: document.getElementById('beskrivelse').value,
+                                    dataejer: document.getElementById('ansvarlig').value,
+                                    dataejer_short: document.getElementById('ansvarlig_short').value,
+                                    dataejer_email: document.getElementById('email').value,
+                                    theme: theme.name,
+                                    status: document.getElementById('status').value,
+                                    afdeling: document.getElementById('afdeling').value,
+                                    center: document.getElementById('center').value,
+                                    opdaterings_frekvens: document.getElementById('frekvens').value,
+                                    revision_user_short: user_short,
+                                    revision_user_long: user_long
+                                }, () => {
+                                    toastr.success('Metadata gemt', 'Success')
+                                    dialog.close()
+                                })
+                            }
                         })
                     }
 
