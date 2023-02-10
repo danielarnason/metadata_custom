@@ -4,5 +4,7 @@
     <lastupdated>4.4</lastupdated>
     <since>4.4</since>
     <description>Metadatamodul for Spatial Suite</description>
+
+    <copydir fromdir="[module:metadata_custom.dir]/html" todir="[cbinfo.wwwroot.dir]/modules/metadata_custom/html" replacetext="true"/>
 	
 </deploy>

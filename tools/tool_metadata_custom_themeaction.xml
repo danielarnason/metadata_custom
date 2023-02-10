@@ -31,46 +31,30 @@
                     if (resp.length > 0) {
 
                         var metadata = resp[0]
-                        var html = `
-                            <h2>${theme._displayname}</h2><br>
-                            <div id="metadata" style="display: grid;">
-                                <label for="ansvarlig">Ansvarlig</label>
-                                <input style="cursor: not-allowed;" type="text" id="ansvarlig" readonly>
 
-                                <label for="ansvarlig_short">Ansvarlig (windows brugernavn)</label>
-                                <input style="cursor: not-allowed;" type="text" id="ansvarlig_short" readonly>
-
-                                <label for="email">Email</label>
-                                <input style="cursor: not-allowed;" type="text" id="email" readonly>
-
-                                <label for="afdeling">Afdeling</label>
-                                <input style="cursor: not-allowed;" type="text" id="afdeling" readonly>
-
-                                <label for="center">Center</label>
-                                <input style="cursor: not-allowed;" type="text" id="center" readonly>
-
-                                <label for="beskrivelse">Beskrivelse</label>
-                                <textarea id="beskrivelse" name="beskrivelse" readonly style="width: 100%; resize: none; cursor: not-allowed" rows="5">${metadata.beskrivelse}</textarea>
-
-                                <label for="status">Status</label>
-                                <input style="cursor: not-allowed;" type="text" id="status" readonly>
-
-                                <label for="frekvens">Ajourføringsfrekvens</label>
-                                <input style="cursor: not-allowed;" type="text" id="frekvens" readonly>
-
-                                <label for="revision_dato">Metadata sidst opdateret</label>
-                                <input type="date" id="revision_dato" disabled>
-                            </div>`
-                        dialog.addContentHTML(html)
+                        var contentDiv = spsjq('<div></div>')
+                        contentDiv.load("modules/metadata_custom/html/metadata_form.html", () => {
+                            dialog.addContentHTML(contentDiv)
+                            
+                            document.getElementById('themeName').innerHTML = theme._displayname
+                            document.getElementById('ansvarlig').value = metadata.dataejer;
+                            document.getElementById('ansvarlig_short').value = metadata.dataejer_short;
+                            document.getElementById('email').value = metadata.dataejer_email;
+                            document.getElementById('afdeling').value = metadata.afdeling;
+                            document.getElementById('center').value = metadata.center;
+                            document.getElementById('status').value = metadata.status;
+                            document.getElementById('frekvens').value = metadata.opdaterings_frekvens;
+                            document.getElementById('revision_dato').value = metadata.revision_dato.split(' ')[0];
+                            document.getElementById('beskrivelse').innerHTML = metadata.beskrivelse;
+                            
+                            document.querySelectorAll('#metadata input, #metadata textarea').forEach(el => {
+                                if (el.type != 'date') {
+                                    el.setAttribute('readonly', '')
+                                    el.style.cursor = 'not-allowed'
+                                }
+                            })
+                        })
                         
-                        document.getElementById('ansvarlig').value = metadata.dataejer;
-                        document.getElementById('ansvarlig_short').value = metadata.dataejer_short;
-                        document.getElementById('email').value = metadata.dataejer_email;
-                        document.getElementById('afdeling').value = metadata.afdeling;
-                        document.getElementById('center').value = metadata.center;
-                        document.getElementById('status').value = metadata.status;
-                        document.getElementById('frekvens').value = metadata.opdaterings_frekvens;
-                        document.getElementById('revision_dato').value = metadata.revision_dato.split(' ')[0];
 
                         dialog.addButtonsHTML(`
                                             <div style='text-align: right;'>
@@ -122,34 +106,22 @@
                             })
                         })
                     } else {
-                        var html = `
-                            <h2>${theme._displayname}</h2><br>
-                            <div id="metadata" style="display: grid;">
-                                <label for="ansvarlig">Ansvarlig</label>
-                                <input placeholder="Indtast dataejers navn" type="text" id="ansvarlig">
 
-                                <label for="ansvarlig_short">Ansvarlig brugernavn</label>
-                                <input placeholder="Indtast windows brugernavn" type="text" id="ansvarlig_short">
+                        var contentDiv = spsjq('<div></div>')
+                        contentDiv.load("modules/metadata_custom/html/metadata_form.html", () => {
+                            dialog.addContentHTML(contentDiv)
 
-                                <label for="email">Email</label>
-                                <input placeholder="Indtast dataejers email" type="text" id="email">
+                            document.getElementById('themeName').innerHTML = theme._displayname
+                            document.getElementById('ansvarlig').setAttribute('placeholder', 'Indtast dataejers navn')
+                            document.getElementById('ansvarlig_short').setAttribute('placeholder', 'Windows login')
+                            document.getElementById('email').setAttribute('placeholder', 'test@slagelse.dk')
+                            document.getElementById('afdeling').setAttribute('placeholder', 'F.eks. Difitalisering')
+                            document.getElementById('center').setAttribute('placeholder', 'F.eks. ØDH')
+                            document.getElementById('beskrivelse').setAttribute('placeholder', 'Kort beskrivelse af datsættet og dets formål')
+                            document.getElementById('status').setAttribute('placeholder', 'Er data gældende eller historiske?')
+                            document.getElementById('frekvens').setAttribute('placeholder', 'Hvor ofte bliver data opdateret?')
+                        })
 
-                                <label for="afdeling">Afdeling</label>
-                                <input placeholder="Indtast dataejers afdeling" type="text" id="afdeling">
-
-                                <label for="center">Center</label>
-                                <input placeholder="Indtast dataejers center" type="text" id="center">
-
-                                <label for="beskrivelse">Beskrivelse</label>
-                                <textarea placeholder="Beskriv datasættet og hvad det f.eks. bliver brugt til" id="beskrivelse" name="beskrivelse" style="width: 100%; resize: none;" rows="5"></textarea>
-
-                                <label for="status">Status</label>
-                                <input placeholder="Angiv datasættets status" type="text" id="status">
-
-                                <label for="frekvens">Ajourføringsfrekvens</label>
-                                <input placeholder="Hvor ofte bliver data opdateret?" type="text" id="frekvens">
-                            </div>`
-                        dialog.addContentHTML(html)
                         dialog.addButtonsHTML(`
                                             <div style='text-align: right;'>
                                                 <button id="gemBtn">Gem metadata</button>

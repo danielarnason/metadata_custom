@@ -6,15 +6,15 @@
         <sql command="read-metadata-for-theme">select * from proj_metadata.metadata where theme = [string: theme];</sql>
         <sql command="update-theme-metadata">
             update proj_metadata.metadata 
-            set beskrivelse=[string:beskrivelse],
+            set beskrivelse=[string:if IsDefined(beskrivelse) then beskrivelse else null endif],
                 dataejer=[string:dataejer],
                 dataejer_short=[string:dataejer_short],
                 dataejer_email=[string:dataejer_email],
                 revision_dato=now(),
                 status=[string:status],
                 opdaterings_frekvens=[string:opdaterings_frekvens],
-                afdeling=[string:afdeling],
-                center=[string:center],
+                afdeling=[string:if IsDefined(afdeling) then afdeling else null endif],
+                center=[string:if IsDefined(center) then center else null endif],
                 revision_user_short=[string:user_short], 
                 revision_user_long=[string:user_long] 
             where id=[number:id];
