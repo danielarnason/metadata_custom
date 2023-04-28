@@ -29,15 +29,16 @@
                 dialog.addContentHTML(html)
                 if (resp.length > 0) {
                     resp.forEach(theme => {
-                        var themeDisplayName = spm.getTheme(theme.theme)._displayname
+                        var curTheme =  spm.getTheme(theme.theme) 
+                        var themeDisplayName = curTheme._displayname
                         let html = `
                             <div id="metadataResult" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                                <p>${themeDisplayName} (${theme.theme})</p><button id="showTheme-${theme.id}">Tænd tema</button>
+                                <p>${themeDisplayName} (${theme.theme})</p><button id="toggleTheme-${theme.id}">Tænd/Sluk</button>
                             </div>
                         `
                         spsjq('#myMetadataThemes').append(html)
-                        document.getElementById(`showTheme-${theme.id}`).addEventListener('click', () => {
-                            spm.getTheme(theme.theme).show();
+                        document.getElementById(`toggleTheme-${theme.id}`).addEventListener('click', () => {
+                            curTheme.toggle();
                         })
                     })
                 } else {
