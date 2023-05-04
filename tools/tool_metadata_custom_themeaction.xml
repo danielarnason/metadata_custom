@@ -41,16 +41,18 @@
                             document.getElementById('ansvarlig_short').value = metadata.dataejer_short;
                             document.getElementById('email').value = metadata.dataejer_email;
                             document.getElementById('afdeling').value = metadata.afdeling;
-                            document.getElementById('center').value = metadata.center;
                             document.getElementById('status').value = metadata.status;
                             document.getElementById('frekvens').value = metadata.opdaterings_frekvens;
                             document.getElementById('revision_dato').value = metadata.revision_dato.split(' ')[0];
                             document.getElementById('beskrivelse').innerHTML = metadata.beskrivelse;
                             
-                            document.querySelectorAll('#metadata input, #metadata textarea').forEach(el => {
-                                if (el.type != 'date') {
+                            document.querySelectorAll('#metadata input, #metadata textarea, #metadata select').forEach(el => {
+                                if (el.type === 'text' || el.type === 'textarea') {
                                     el.setAttribute('readonly', '')
-                                    el.style.cursor = 'not-allowed'
+                                        el.style.cursor = 'not-allowed'
+                                } else if (el.type === 'select-one') {
+                                    el.setAttribute('disabled', '')
+                                        el.style.cursor = 'not-allowed'
                                 }
                             })
                         })
@@ -69,18 +71,24 @@
                         var gemBtnEl = document.getElementById('gemBtn')
 
                         redigerCheckboxEl.addEventListener('change', () => {
-                            var inputEls = document.querySelectorAll('#metadata input, #metadata textarea')
+                            var inputEls = document.querySelectorAll('#metadata input, #metadata textarea, #metadata select')
                             gemBtnEl.removeAttribute('disabled')
                             if (redigerCheckboxEl.checked) {
                                 inputEls.forEach(el => {
-                                    el.removeAttribute('readonly')
-                                    el.style.cursor = 'auto'
+                                    if (el.type != 'date') {
+                                        el.removeAttribute('readonly')
+                                        el.removeAttribute('disabled')
+                                        el.style.cursor = 'auto'
+                                    }
                                 })
                             } else if (!redigerCheckboxEl.checked) {
                                 gemBtnEl.setAttribute('disabled', '')
                                 inputEls.forEach(el => {
-                                    if (el.type != 'date') {
+                                    if (el.type === 'text' || el.type === 'textarea') {
                                         el.setAttribute('readonly', '')
+                                        el.style.cursor = 'not-allowed'
+                                    } else if (el.type === 'select-one') {
+                                        el.setAttribute('disabled', '')
                                         el.style.cursor = 'not-allowed'
                                     }
                                 })
@@ -96,13 +104,13 @@
                                 dataejer_email: document.getElementById('email').value,
                                 status: document.getElementById('status').value,
                                 afdeling: document.getElementById('afdeling').value,
-                                center: document.getElementById('center').value,
                                 opdaterings_frekvens: document.getElementById('frekvens').value,
                                 user_short: user_short,
                                 user_long: user_long,
                                 id: metadata.id
                             }, () => {
                                 toastr.success('Metadata gemt', 'Success')
+                                /*spsjq(`div[themename="${theme.name}"] > div > span`).text(document.getElementById('beskrivelse').value)*/
                             })
                         })
                     } else {
@@ -116,7 +124,6 @@
                             document.getElementById('ansvarlig_short').setAttribute('placeholder', 'Windows login')
                             document.getElementById('email').setAttribute('placeholder', 'test@slagelse.dk')
                             document.getElementById('afdeling').setAttribute('placeholder', 'F.eks. Difitalisering')
-                            document.getElementById('center').setAttribute('placeholder', 'F.eks. ØDH')
                             document.getElementById('beskrivelse').setAttribute('placeholder', 'Kort beskrivelse af datsættet og dets formål')
                             document.getElementById('status').setAttribute('placeholder', 'Er data gældende eller historiske?')
                             document.getElementById('frekvens').setAttribute('placeholder', 'Hvor ofte bliver data opdateret?')
@@ -165,12 +172,12 @@
                                     theme: theme.name,
                                     status: document.getElementById('status').value,
                                     afdeling: document.getElementById('afdeling').value,
-                                    center: document.getElementById('center').value,
                                     opdaterings_frekvens: document.getElementById('frekvens').value,
                                     revision_user_short: user_short,
                                     revision_user_long: user_long
                                 }, () => {
                                     toastr.success('Metadata gemt', 'Success')
+                                    /*spsjq(`div[themename="${theme.name}"] > div > span`).text(document.getElementById('beskrivelse').value)*/
                                     dialog.close()
                                 })
                             }
@@ -184,9 +191,7 @@
             },
 
             conditionfunction: theme => {
-                if (theme.initialConfig.primaryendpointtype == 'postgis') {
-                    return true
-                }
+                return true
             },
 
             buttonoptions: {

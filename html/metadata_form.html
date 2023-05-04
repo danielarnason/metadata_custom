@@ -11,18 +11,32 @@
 
     <label for="afdeling">Afdeling</label>
     <input type="text" id="afdeling">
-
+<!-- 
     <label for="center">Center</label>
-    <input type="text" id="center">
+    <input type="text" id="center"> -->
 
     <label for="beskrivelse">Beskrivelse</label>
     <textarea id="beskrivelse" name="beskrivelse" style="width: 100%; resize: none;" rows="5"></textarea>
 
     <label for="status">Status</label>
-    <input type="text" id="status">
+    <!-- <input type="text" id="status"> -->
+    <select name="status" id="status">
+        <option value="aktuel" selected>Aktuel</option>
+        <option value="historisk">Historisk</option>
+        <option value="slettes">Skal slettes</option>
+    </select>
 
     <label for="frekvens">Ajourføringsfrekvens</label>
-    <input type="text" id="frekvens">
+    <!-- <input type="text" id="frekvens"> -->
+    <select name="frekvens" id="frekvens">
+        <option value="loebende">Løbende / Efter behov</option>
+        <option value="dag">Dagligt</option>
+        <option value="maaned">Hver måned</option>
+        <option value="kvartal">kvartalsvist</option>
+        <option value="halvaar">Halvårligt</option>
+        <option value="aar">Årligt</option>
+        <option value="aldrig" selected>Aldrig</option>
+    </select>
 
     <label for="revision_dato">Metadata sidst opdateret</label>
     <input type="date" id="revision_dato" disabled>
